@@ -1,82 +1,106 @@
 const main = document.getElementById("main");
-const addUserBtn = document.getElementById("add-user");
-const doubleBtn = document.getElementById("double");
-const sortMillionairesBtn = document.getElementById("show-millionaires");
-const sortBtn = document.getElementById("sort");
-const calculateWealthBtn = document.getElementById("calculate-wealth");
+const addPersonBtn = document.getElementById("add-person");
+const doubleMoneyBtn = document.getElementById("double");
+const showOnlyMillionairesBtn = document.getElementById("show-millionaires");
+const showOnlyNonMillionairesBtn = document.getElementById("show-nonMillionaires");
+const sortByRichestBtn = document.getElementById("sort-richest");
+const sortByPoorestBtn = document.getElementById("sort-poorest");
+const showOnlyFemalesBtn = document.getElementById("show-females");
+const showOnlyMalesBtn = document.getElementById("show-males");
+const calculateAllWealthBtn = document.getElementById("calculate-wealth");
 
-let data = [];
+let persons = [];
 
-// Fetch random user and add money
-async function getRandomUser() {
+const moneyFormat = (number) => `$${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+
+async function addRandomPerson() {
   const res = await fetch("https://randomuser.me/api");
   const data = await res.json();
-  const user = data.results[0];
-  const newUser = {
-    name: `${user.name.first} ${user.name.last}`,
-    money: Math.floor(Math.random() * 1000000),
+  const person = data.results[0];
+  const newPerson = {
+    gender: `${person.gender}`,
+    name: `${person.name.first} ${person.name.last}`,
+    wealth: Math.floor(Math.random() * 1000000),
   };
-  addData(newUser);
+  addNewPersonToPersons(newPerson);
 }
 
-// Add new obj to data arr
-function addData(obj) {
-  data.push(obj);
-  updateDOM();
+function addNewPersonToPersons(obj) {
+  persons.push(obj);
+  updateDOM(persons);
 }
 
-// Double users money
 function doubleMoney() {
-  data = data.map((user) => {
-    return { ...user, money: user.money * 2 };
+  persons = persons.map((person) => {
+    return { ...person, wealth: person.wealth * 2 };
   });
-  updateDOM();
+  updateDOM(persons);
 }
 
-// Sort by richest
+function showOnlyMillionaires() {
+  persons = persons.filter((person) => person.wealth >= 1000000);
+  updateDOM(persons);
+}
+
+function showOnlyNonMillionaires() {
+  persons = persons.filter((person) => person.wealth <= 1000000);
+  updateDOM(persons);
+}
+
 function sortByRichest() {
-  data.sort((a, b) => b.money - a.money);
-  updateDOM();
+  const descendent = (a, b) => b.wealth - a.wealth;
+  persons.sort(descendent);
+  updateDOM(persons);
 }
 
-// Filter only milioners
-function sortMillionaires() {
-  data = data.filter((user) => user.money > 1000000);
-  updateDOM();
+function sortByPoorest() {
+  const ascendent = (a, b) => a.wealth - b.wealth;
+  persons.sort(ascendent);
+  updateDOM(persons);
 }
 
-// Calculate the total Wealth
-function calculateWealth() {
-  const wealth = data.reduce((acc, user) => (acc += user.money), 0);
-  console.log(formatMoney(wealth));
-  wealthEl = document.createElement("div");
-  wealthEl.innerHTML = `<h3>Total wealth: <strong>${formatMoney(
-    wealth
-  )}</strong></h3>`;
-  main.append(wealthEl);
+function showOnlyFemales() {
+  persons = persons.filter((person) => person.gender === "female");
+  updateDOM(persons);
 }
 
-// Update DOM
-function updateDOM(providedData = data) {
-  // Clear the main div
-  main.innerHTML = "<h2><strong>Person</strong>Wealth</h2>";
-  providedData.forEach((item) => {
-    const element = document.createElement("div");
-    element.classList.add("person");
-    element.innerHTML = `<strong>${item.name}</strong> ${formatMoney(item.money)}`;
-    main.appendChild(element);
+function showOnlyMales() {
+  const males = (person) => person.gender === "male";
+  persons = persons.filter(males);
+  updateDOM(persons);
+}
+
+function calculateAllWealth() {
+  totalWealth = persons.reduce((acc, person) => (acc += person.wealth), 0);
+  const totalWealthDiv = document.createElement("div");
+  totalWealthDiv.innerHTML = `<h3>Total Wealth:<strong>${moneyFormat(totalWealth)}</strong></h3>`;
+  main.appendChild(totalWealthDiv);
+}
+
+function updateDOM(persons) {
+  main.innerHTML = `<h2><strong>Person</strong>Wealth</h2>`;
+  persons.forEach((person) => {
+    const personDiv = document.createElement("div");
+    personDiv.classList.add("person");
+    const personNameDiv = document.createElement("div");
+    personNameDiv.classList.add("personName");
+    personNameDiv.innerHTML = `${person.name}`;
+    const personWealthDiv = document.createElement("div");
+    personWealthDiv.classList.add("personWealth");
+    personWealthDiv.innerHTML = `${moneyFormat(person.wealth)}`;
+    personDiv.appendChild(personNameDiv);
+    personDiv.appendChild(personWealthDiv);
+    main.appendChild(personDiv);
   });
 }
 
-// Format number as money - https://stackoverflow.com/questions/149055/how-to-format-numbers-as-currency-string
-function formatMoney(number) {
-  return `$ ${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
-}
-
-// Event listeners
-addUserBtn.addEventListener("click", getRandomUser);
-doubleBtn.addEventListener("click", doubleMoney);
-sortBtn.addEventListener("click", sortByRichest);
-sortMillionairesBtn.addEventListener("click", sortMillionaires);
-calculateWealthBtn.addEventListener("click", calculateWealth);
-
+// Buttons Events
+addPersonBtn.addEventListener("click", addRandomPerson);
+doubleMoneyBtn.addEventListener("click", doubleMoney);
+showOnlyMillionairesBtn.addEventListener("click", showOnlyMillionaires);
+showOnlyNonMillionairesBtn.addEventListener("click", showOnlyNonMillionaires);
+sortByPoorestBtn.addEventListener("click", sortByPoorest);
+sortByRichestBtn.addEventListener("click", sortByRichest);
+showOnlyFemalesBtn.addEventListener("click", showOnlyFemales);
+showOnlyMalesBtn.addEventListener("click", showOnlyMales);
+calculateAllWealthBtn.addEventListener("click", calculateAllWealth);
