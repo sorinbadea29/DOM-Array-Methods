@@ -85,6 +85,10 @@ h2 {
   text-align: right;
 }
 
+strong{
+  margin-right: 10px;
+}
+
 h3 {
   display: flex;
   justify-content: flex-end;
