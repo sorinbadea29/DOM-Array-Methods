@@ -50,7 +50,7 @@ function updateDOM(persons){
 
 function doubleMoney(){
   persons = persons.map(person => {
-    return {...person, wealth: person.wealth* 2}
+    return {...person, wealth: person.wealth * 2}
   })
   updateDOM(persons);
 }
@@ -62,7 +62,7 @@ function showOnlyMillionaires(){
 }
 
 function showOnlyNonMillionaires(){
-  const nonMillionaires = person => person.wealth <= 1000000;
+  const nonMillionaires = person => person.wealth < 1000000;
   persons = persons.filter(nonMillionaires);
   updateDOM(persons);
 }
