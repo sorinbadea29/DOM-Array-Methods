@@ -56,7 +56,7 @@ button:focus {
   outline: 0;
 }
 
-main {
+#main {
   padding: 0 0 0 20px;
   flex: 2;
 }
@@ -67,6 +67,18 @@ h2 {
   border-bottom: 1px solid #333;
   padding: 0 0 10px;
   font-weight: 300;
+}
+
+ul{
+  font-size: 20px; 
+  list-style-type:  none;
+}
+
+ul li{
+  display: flex;
+  justify-content: space-between;
+  font-weight: 300;
+  margin: 10px 0 0 0;
 }
 
 .person {
