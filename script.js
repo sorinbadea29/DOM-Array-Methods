@@ -76,7 +76,7 @@ function calculateEntireWealth(){
     .map(person => person.wealth)
     .reduce((acc, item) => (acc += item))
   const totalEl = document.createElement('div');
-  totalEl.innerHTML = `<h3><strong>Total: </strong>${formatMoney(total)}</h3>`;
+  totalEl.innerHTML = `<h3><strong>Total:</strong>${formatMoney(total)}</h3>`;
   main.appendChild(totalEl);
 }
 
