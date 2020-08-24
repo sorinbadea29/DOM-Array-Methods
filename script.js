@@ -72,12 +72,16 @@ function showOnlyMales(){
 }
 
 function calculateEntireWealth(){
-  const total = persons
-    .map(person => person.wealth)
-    .reduce((acc, item) => (acc += item))
-  const totalEl = document.createElement('div');
-  totalEl.innerHTML = `<h3><strong>Total:</strong>${formatMoney(total)}</h3>`;
-  main.appendChild(totalEl);
+  if(persons.length !== 0){
+    const total = persons
+      .map(person => person.wealth)
+      .reduce((acc, item) => (acc += item), 0);
+    const totalEl = document.createElement('div');
+    totalEl.innerHTML = `<h3><strong>Total Wealth:</strong>${formatMoney(total)}</h3>`
+    main.appendChild(totalEl);
+  } else {
+    return
+  }
 }
 
 function updateDOM(persons){
