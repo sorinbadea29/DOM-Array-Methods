@@ -72,7 +72,7 @@ function showOnlyMales(){
 }
 
 function calculateEntireWealth(){
-  if(persons.length !== 0){
+  if(persons.length > 1){
     const total = persons
       .map(person => person.wealth)
       .reduce((acc, item) => (acc += item), 0);
